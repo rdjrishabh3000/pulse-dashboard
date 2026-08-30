@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pulse Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="app-header">
+      <div class="brand">
+        <h1>Pulse Dashboard</h1>
+        <p class="subtitle">Live weather & regional updates</p>
+      </div>
+
+      <form id="searchForm" class="search-box">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="cityInput" 
+            placeholder="Search city..." 
+            autocomplete="off" 
+            required 
+          />
+          <ul id="suggestions" class="suggestions-list"></ul>
+        </div>
+        <button type="submit" id="searchBtn">Search</button>
+      </form>
+    </header>
+
+    <main class="grid-layout">
+      <!-- Weather & Map Section -->
+      <section class="card weather-card">
+        <div class="card-header">
+          <h2 id="cityName">Jodhpur, India</h2>
+          <span class="badge">Live</span>
+        </div>
+
+        <div class="weather-main">
+          <div class="temp-wrapper">
+            <span id="temperature">--</span><span class="unit">°C</span>
+          </div>
+          <div class="weather-icon-box" id="weatherIcon">☀️</div>
+        </div>
+
+        <p id="weatherDesc" class="weather-status">Loading conditions...</p>
+
+        <!-- Dynamic Map Container with Toggle -->
+        <div class="map-wrapper">
+          <div id="mapPlaceholder" class="map-placeholder">
+            <span>📍 Tap to load interactive map</span>
+          </div>
+          <iframe 
+            id="mapIframe" 
+            class="hidden-map"
+            loading="lazy" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- 3-Day Forecast Strip -->
+        <div class="forecast-section">
+          <span class="section-title">3-Day Forecast</span>
+          <div id="forecastGrid" class="forecast-grid">
+            <div class="forecast-day skeleton-loader"></div>
+            <div class="forecast-day skeleton-loader"></div>
+            <div class="forecast-day skeleton-loader"></div>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">Feels Like</span>
+            <span id="feelsLike" class="metric-value">--°C</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Humidity</span>
+            <span id="humidity" class="metric-value">--%</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Wind Speed</span>
+            <span id="windSpeed" class="metric-value">-- km/h</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Pressure</span>
+            <span id="pressure" class="metric-value">-- hPa</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scrollable News Section -->
+      <section class="card news-card">
+        <div class="card-header">
+          <h2>Top Headlines</h2>
+          <span class="news-count">Live Feed</span>
+        </div>
+        <div id="newsFeed" class="news-feed">
+          <!-- Skeleton items on initial load -->
+          <div class="news-item-skeleton"></div>
+          <div class="news-item-skeleton"></div>
+          <div class="news-item-skeleton"></div>
+          <div class="news-item-skeleton"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
