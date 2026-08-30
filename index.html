@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
   <title>Pulse Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -46,7 +46,7 @@
 
         <p id="weatherDesc" class="weather-status">Loading conditions...</p>
 
-        <!-- Dynamic Map Container with Toggle -->
+        <!-- Dynamic Map Container -->
         <div class="map-wrapper">
           <div id="mapPlaceholder" class="map-placeholder">
             <span>📍 Tap to load interactive map</span>
@@ -96,7 +96,6 @@
           <span class="news-count">Live Feed</span>
         </div>
         <div id="newsFeed" class="news-feed">
-          <!-- Skeleton items on initial load -->
           <div class="news-item-skeleton"></div>
           <div class="news-item-skeleton"></div>
           <div class="news-item-skeleton"></div>
