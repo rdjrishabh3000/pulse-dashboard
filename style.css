@@ -11,26 +11,30 @@ body {
   color: #f8fafc;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
-  padding: 1.5rem 1rem;
+  padding: 1rem;
+  overflow-x: hidden;
 }
 
 .dashboard-container {
   width: 100%;
   max-width: 1100px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Header & Search Bar */
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   gap: 1rem;
 }
 
 .brand h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
@@ -38,7 +42,6 @@ body {
 .subtitle {
   font-size: 0.8rem;
   color: #64748b;
-  margin-top: 0.1rem;
 }
 
 .search-box {
@@ -49,20 +52,19 @@ body {
 
 .input-wrapper {
   position: relative;
-  width: 260px;
+  width: 250px;
 }
 
 input {
   width: 100%;
-  height: 44px;
-  padding: 0 2.5rem 0 1rem;
+  height: 40px;
+  padding: 0 2.2rem 0 0.9rem;
   border-radius: 8px;
   border: 1px solid #1e293b;
   background: #1c2541;
   color: #fff;
   outline: none;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+  font-size: 0.9rem;
 }
 
 input:focus {
@@ -71,23 +73,17 @@ input:focus {
 
 .geo-btn {
   position: absolute;
-  right: 8px;
+  right: 6px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
-  padding: 4px;
-  height: auto;
   opacity: 0.7;
-  transition: opacity 0.2s;
 }
 
-.geo-btn:hover {
-  opacity: 1;
-  background: transparent;
-}
+.geo-btn:hover { opacity: 1; }
 
 .suggestions-list {
   position: absolute;
@@ -98,19 +94,16 @@ input:focus {
   border: 1px solid #334155;
   border-radius: 8px;
   list-style: none;
-  max-height: 220px;
+  max-height: 200px;
   overflow-y: auto;
   z-index: 100;
   display: none;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
-.suggestions-list.active {
-  display: block;
-}
+.suggestions-list.active { display: block; }
 
 .suggestions-list li {
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.8rem;
   font-size: 0.85rem;
   cursor: pointer;
   border-bottom: 1px solid #1e293b;
@@ -125,47 +118,49 @@ input:focus {
 }
 
 button {
-  height: 44px;
-  padding: 0 1.2rem;
+  height: 40px;
+  padding: 0 1rem;
   border-radius: 8px;
   border: none;
   background-color: #38bdf8;
   color: #0b132b;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-button:hover {
-  background-color: #7dd3fc;
-}
-
-/* Fixed 2-Column Grid for Desktop */
+/* STRICT 2-COLUMN GRID (Fixed Height UX) */
 .grid-layout {
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
-  align-items: stretch;
+  height: 580px; /* Locks card heights to screen fit */
 }
 
 .card {
   background: #1c2541;
   border: 1px solid #334155;
   border-radius: 16px;
-  padding: 1.25rem;
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
-  min-height: 620px;
+  height: 100%;
+  overflow-y: auto; /* Adds smooth internal scroll if content overflows */
 }
 
-.weather-card {
-  justify-content: space-between;
+/* Custom Scrollbars for Cards */
+.card::-webkit-scrollbar, .news-feed::-webkit-scrollbar {
+  width: 5px;
+}
+.card::-webkit-scrollbar-thumb, .news-feed::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.8rem;
 }
 
 .header-badges {
@@ -175,7 +170,7 @@ button:hover {
 }
 
 .card-header h2 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #e2e8f0;
 }
@@ -183,15 +178,15 @@ button:hover {
 .badge, .news-count {
   background: rgba(56, 189, 248, 0.15);
   color: #38bdf8;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 20px;
   font-weight: 600;
 }
 
 .aqi-badge {
-  font-size: 0.72rem;
-  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 20px;
   font-weight: 600;
   background: #334155;
@@ -206,7 +201,6 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 0.2rem;
 }
 
 .temp-wrapper {
@@ -215,42 +209,41 @@ button:hover {
 }
 
 #temperature {
-  font-size: 3.2rem;
+  font-size: 2.8rem;
   font-weight: 800;
   color: #38bdf8;
   line-height: 1;
 }
 
 .unit {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #38bdf8;
   margin-left: 0.2rem;
 }
 
 .weather-icon-box {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   line-height: 1;
 }
 
 .weather-status {
-  font-size: 0.88rem;
-  font-weight: 500;
+  font-size: 0.85rem;
   color: #cbd5e1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
-/* Hourly Forecast Horizontal Scroll */
+/* Hourly Weather Scroll */
 .hourly-section {
   background: rgba(15, 23, 42, 0.3);
   border: 1px solid #243356;
   border-radius: 10px;
-  padding: 0.5rem 0.6rem;
+  padding: 0.5rem;
   margin-bottom: 0.6rem;
 }
 
 .section-title {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -260,49 +253,28 @@ button:hover {
 
 .hourly-slider {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.2rem;
-}
-
-.hourly-slider::-webkit-scrollbar {
-  height: 3px;
-}
-
-.hourly-slider::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
 }
 
 .hourly-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 48px;
+  min-width: 44px;
   background: #162038;
-  padding: 0.35rem;
+  padding: 0.3rem;
   border-radius: 6px;
-  gap: 0.15rem;
 }
 
-.hourly-time {
-  font-size: 0.65rem;
-  color: #94a3b8;
-}
-
-.hourly-icon {
-  font-size: 0.95rem;
-}
-
-.hourly-temp {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #e2e8f0;
-}
+.hourly-time { font-size: 0.62rem; color: #94a3b8; }
+.hourly-icon { font-size: 0.9rem; }
+.hourly-temp { font-size: 0.72rem; font-weight: 600; color: #e2e8f0; }
 
 .map-wrapper {
   width: 100%;
-  height: 105px;
+  height: 90px;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #334155;
@@ -320,8 +292,7 @@ button:hover {
   cursor: pointer;
   background: radial-gradient(circle at center, #1e293b 0%, #0b132b 100%);
   color: #38bdf8;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.78rem;
 }
 
 .hidden-map {
@@ -339,97 +310,85 @@ button:hover {
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid #243356;
   border-radius: 10px;
-  padding: 0.5rem 0.6rem;
+  padding: 0.5rem;
   margin-bottom: 0.6rem;
 }
 
 .forecast-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .forecast-day {
   background: #162038;
   border-radius: 6px;
-  padding: 0.4rem;
+  padding: 0.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  height: 58px;
+  height: 52px;
 }
 
-.day-name { font-size: 0.7rem; color: #94a3b8; }
-.day-icon { font-size: 1rem; }
-.day-temp { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; }
+.day-name { font-size: 0.68rem; color: #94a3b8; }
+.day-icon { font-size: 0.95rem; }
+.day-temp { font-size: 0.75rem; font-weight: 600; color: #e2e8f0; }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 1rem;
+  gap: 0.4rem 0.8rem;
   padding-top: 0.5rem;
   border-top: 1px solid #334155;
 }
 
 .metric-item { display: flex; flex-direction: column; }
-.metric-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
-.metric-value { font-size: 0.88rem; font-weight: 600; color: #cbd5e1; }
+.metric-label { font-size: 0.62rem; color: #64748b; text-transform: uppercase; }
+.metric-value { font-size: 0.82rem; font-weight: 600; color: #cbd5e1; }
 
+/* News Scrollable Container */
 .news-feed {
-  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
   overflow-y: auto;
-  max-height: 520px;
-  padding-right: 0.3rem;
+  flex-grow: 1;
+  padding-right: 0.2rem;
 }
-
-.news-feed::-webkit-scrollbar { width: 4px; }
-.news-feed::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 
 .news-item {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.6rem;
   align-items: center;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
   border-bottom: 1px solid #334155;
 }
 
 .news-item:last-child { border-bottom: none; }
 
 .news-thumb {
-  width: 62px;
-  height: 62px;
-  border-radius: 8px;
+  width: 54px;
+  height: 54px;
+  border-radius: 6px;
   object-fit: cover;
   background: #0b132b;
-  border: 1px solid #334155;
   flex-shrink: 0;
-}
-
-.news-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .news-content a {
   color: #f1f5f9;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.82rem;
-  line-height: 1.35;
+  font-size: 0.8rem;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 0.2rem;
 }
 
 .news-content a:hover { color: #38bdf8; }
-.news-content p { font-size: 0.7rem; color: #64748b; }
+.news-content p { font-size: 0.68rem; color: #64748b; margin-top: 0.1rem; }
 
 @keyframes shimmer {
   0% { background-position: -200px 0; }
@@ -443,14 +402,13 @@ button:hover {
   border-radius: 8px;
 }
 
-.news-item-skeleton { height: 62px; width: 100%; margin-bottom: 0.75rem; }
+.news-item-skeleton { height: 54px; width: 100%; }
 
-/* Responsive break for Mobile screens */
-@media (max-width: 850px) {
-  body { padding: 1rem 0.75rem; }
-  .app-header { flex-direction: column; align-items: stretch; gap: 0.8rem; }
-  .brand { text-align: center; }
+/* Mobile Adaptability */
+@media (max-width: 800px) {
+  body { padding: 0.5rem; align-items: flex-start; }
+  .grid-layout { grid-template-columns: 1fr; height: auto; }
+  .card { height: auto; max-height: none; }
+  .news-feed { max-height: 400px; }
   .search-box, .input-wrapper { width: 100%; }
-  .grid-layout { grid-template-columns: 1fr; gap: 1rem; }
-  .card { min-height: auto; }
 }
