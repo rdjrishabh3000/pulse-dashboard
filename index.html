@@ -23,6 +23,7 @@
             autocomplete="off" 
             required 
           />
+          <button type="button" id="geoBtn" class="geo-btn" title="Use current location">🎯</button>
           <ul id="suggestions" class="suggestions-list"></ul>
         </div>
         <button type="submit" id="searchBtn">Search</button>
@@ -34,7 +35,10 @@
       <section class="card weather-card">
         <div class="card-header">
           <h2 id="cityName">Jodhpur, India</h2>
-          <span class="badge">Live</span>
+          <div class="header-badges">
+            <span id="aqiBadge" class="aqi-badge">AQI --</span>
+            <span class="badge">Live</span>
+          </div>
         </div>
 
         <div class="weather-main">
@@ -45,6 +49,14 @@
         </div>
 
         <p id="weatherDesc" class="weather-status">Loading conditions...</p>
+
+        <!-- Hourly Forecast Slider -->
+        <div class="hourly-section">
+          <span class="section-title">24-Hour Forecast</span>
+          <div id="hourlySlider" class="hourly-slider">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
 
         <!-- Dynamic Map Container -->
         <div class="map-wrapper">
