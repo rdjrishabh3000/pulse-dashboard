@@ -27,7 +27,7 @@ const weatherMap = {
 
 const FALLBACK_NEWS_IMG = "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&auto=format&fit=crop&q=60";
 
-// GPS Geolocation Handler
+// GPS Button
 geoBtn.addEventListener('click', () => {
   if (!navigator.geolocation) {
     alert('Geolocation is not supported by your browser.');
@@ -39,10 +39,6 @@ geoBtn.addEventListener('click', () => {
     async (position) => {
       const { latitude, longitude } = position.coords;
       try {
-        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${latitude},${longitude}&count=1`);
-        // Reverse geocode fallback query
-        const revRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m`);
-        
         cityInput.value = "Your Location";
         loadWeatherData(latitude, longitude, "Your Location");
       } catch (err) {
@@ -51,14 +47,14 @@ geoBtn.addEventListener('click', () => {
         geoBtn.textContent = '🎯';
       }
     },
-    (error) => {
-      alert('Unable to retrieve location. Check site permissions.');
+    () => {
+      alert('Unable to retrieve location. Please check browser permissions.');
       geoBtn.textContent = '🎯';
     }
   );
 });
 
-// Map Click Listener
+// Map Click
 mapPlaceholder.addEventListener('click', () => {
   if (currentCoords.lat && currentCoords.lon) {
     mapIframe.src = `https://maps.google.com/maps?q=${currentCoords.lat},${currentCoords.lon}&z=11&output=embed`;
@@ -66,7 +62,7 @@ mapPlaceholder.addEventListener('click', () => {
   }
 });
 
-// Search & Suggestions Logic
+// Auto-suggest Keyboard Navigation
 cityInput.addEventListener('keydown', (e) => {
   const items = suggestionsList.querySelectorAll('li');
   if (!suggestionsList.classList.contains('active') || items.length === 0) return;
@@ -197,7 +193,6 @@ async function loadWeatherData(lat, lon, locationName) {
     mapIframe.src = `https://maps.google.com/maps?q=${lat},${lon}&z=11&output=embed`;
   }
 
-  // Fetch Current, Hourly (24h) and Daily (3-Day) Forecast Data
   const weatherRes = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,surface_pressure,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max&timezone=auto`
   );
@@ -221,7 +216,6 @@ async function loadWeatherData(lat, lon, locationName) {
   fetchNews(locationName.split(',')[0]);
 }
 
-// Fetch Air Quality Index (AQI)
 async function fetchAirQuality(lat, lon) {
   const aqiBadge = document.getElementById('aqiBadge');
   try {
@@ -249,7 +243,6 @@ async function fetchAirQuality(lat, lon) {
   }
 }
 
-// Render Hourly 24h Slider
 function renderHourly(hourly) {
   const hourlySlider = document.getElementById('hourlySlider');
   const nowHour = new Date().getHours();
@@ -352,7 +345,6 @@ async function fetchNews(city) {
             src="${imgSrc}" 
             alt="News thumbnail" 
             loading="lazy" 
-            decoding="async"
             onerror="this.src='${FALLBACK_NEWS_IMG}'" 
           />
           <div class="news-content">
@@ -370,4 +362,4 @@ async function fetchNews(city) {
 }
 
 // Initial load
-fetchDashboardData('Prayagraj');
+fetchDashboardData('Jodhpur');

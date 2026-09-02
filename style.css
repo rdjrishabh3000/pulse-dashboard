@@ -18,7 +18,7 @@ body {
 
 .dashboard-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
 }
 
 .app-header {
@@ -49,7 +49,7 @@ body {
 
 .input-wrapper {
   position: relative;
-  width: 240px;
+  width: 260px;
 }
 
 input {
@@ -140,9 +140,10 @@ button:hover {
   background-color: #7dd3fc;
 }
 
+/* Fixed 2-Column Grid for Desktop */
 .grid-layout {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 1fr 1.15fr;
   gap: 1.25rem;
   align-items: stretch;
 }
@@ -154,7 +155,7 @@ button:hover {
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  height: 680px;
+  min-height: 620px;
 }
 
 .weather-card {
@@ -188,7 +189,6 @@ button:hover {
   font-weight: 600;
 }
 
-/* AQI Colors */
 .aqi-badge {
   font-size: 0.72rem;
   padding: 0.25rem 0.6rem;
@@ -300,7 +300,6 @@ button:hover {
   color: #e2e8f0;
 }
 
-/* Map Section */
 .map-wrapper {
   width: 100%;
   height: 105px;
@@ -333,15 +332,9 @@ button:hover {
   filter: invert(90%) hue-rotate(180deg) contrast(100%);
 }
 
-.map-wrapper.active .map-placeholder {
-  display: none;
-}
+.map-wrapper.active .map-placeholder { display: none; }
+.map-wrapper.active .hidden-map { display: block; }
 
-.map-wrapper.active .hidden-map {
-  display: block;
-}
-
-/* 3-Day Forecast Section */
 .forecast-section {
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid #243356;
@@ -367,20 +360,9 @@ button:hover {
   height: 58px;
 }
 
-.day-name {
-  font-size: 0.7rem;
-  color: #94a3b8;
-}
-
-.day-icon {
-  font-size: 1rem;
-}
-
-.day-temp {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #e2e8f0;
-}
+.day-name { font-size: 0.7rem; color: #94a3b8; }
+.day-icon { font-size: 1rem; }
+.day-temp { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; }
 
 .metrics-grid {
   display: grid;
@@ -390,42 +372,22 @@ button:hover {
   border-top: 1px solid #334155;
 }
 
-.metric-item {
-  display: flex;
-  flex-direction: column;
-}
+.metric-item { display: flex; flex-direction: column; }
+.metric-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
+.metric-value { font-size: 0.88rem; font-weight: 600; color: #cbd5e1; }
 
-.metric-label {
-  font-size: 0.65rem;
-  color: #64748b;
-  text-transform: uppercase;
-}
-
-.metric-value {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
-/* News Section Layout */
 .news-feed {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
   overflow-y: auto;
+  max-height: 520px;
   padding-right: 0.3rem;
-  flex-grow: 1;
 }
 
-.news-feed::-webkit-scrollbar {
-  width: 4px;
-}
-
-.news-feed::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
-}
+.news-feed::-webkit-scrollbar { width: 4px; }
+.news-feed::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 
 .news-item {
   display: flex;
@@ -435,9 +397,7 @@ button:hover {
   border-bottom: 1px solid #334155;
 }
 
-.news-item:last-child {
-  border-bottom: none;
-}
+.news-item:last-child { border-bottom: none; }
 
 .news-thumb {
   width: 62px;
@@ -468,14 +428,8 @@ button:hover {
   margin-bottom: 0.2rem;
 }
 
-.news-content a:hover {
-  color: #38bdf8;
-}
-
-.news-content p {
-  font-size: 0.7rem;
-  color: #64748b;
-}
+.news-content a:hover { color: #38bdf8; }
+.news-content p { font-size: 0.7rem; color: #64748b; }
 
 @keyframes shimmer {
   0% { background-position: -200px 0; }
@@ -489,45 +443,14 @@ button:hover {
   border-radius: 8px;
 }
 
-.news-item-skeleton {
-  height: 62px;
-  width: 100%;
-  margin-bottom: 0.75rem;
-}
+.news-item-skeleton { height: 62px; width: 100%; margin-bottom: 0.75rem; }
 
-@media (max-width: 768px) {
-  body {
-    padding: 1rem 0.75rem;
-  }
-
-  .app-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.8rem;
-  }
-
-  .brand {
-    text-align: center;
-  }
-
-  .search-box {
-    width: 100%;
-  }
-
-  .input-wrapper {
-    width: 100%;
-  }
-
-  .grid-layout {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .card {
-    height: auto;
-  }
-
-  .news-feed {
-    max-height: 480px;
-  }
+/* Responsive break for Mobile screens */
+@media (max-width: 850px) {
+  body { padding: 1rem 0.75rem; }
+  .app-header { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+  .brand { text-align: center; }
+  .search-box, .input-wrapper { width: 100%; }
+  .grid-layout { grid-template-columns: 1fr; gap: 1rem; }
+  .card { min-height: auto; }
 }
