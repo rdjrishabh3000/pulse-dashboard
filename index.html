@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pulse Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -33,7 +33,7 @@
     <main class="grid-layout">
       <section class="card weather-card">
         <div class="card-header">
-          <h2 id="cityName">Jodhpur, India</h2>
+          <h2 id="cityName">Jodhpur, Rajasthan, India</h2>
           <div class="header-badges">
             <span id="aqiBadge" class="aqi-badge">AQI --</span>
             <span class="badge">Live</span>
@@ -97,14 +97,18 @@
 
       <section class="card news-card">
         <div class="card-header">
-          <h2>Top Headlines</h2>
+          <div class="header-title-group">
+            <h2>Top Headlines</h2>
+            <span class="news-subtitle">Regional & Global Insights</span>
+          </div>
           <span class="news-count">Live Feed</span>
         </div>
-        <div id="newsFeed" class="news-feed">
-          <div class="news-item-skeleton"></div>
-          <div class="news-item-skeleton"></div>
-          <div class="news-item-skeleton"></div>
-          <div class="news-item-skeleton"></div>
+        
+        <div id="newsFeed" class="news-feed-grid">
+          <div class="news-card-skeleton"></div>
+          <div class="news-card-skeleton"></div>
+          <div class="news-card-skeleton"></div>
+          <div class="news-card-skeleton"></div>
         </div>
       </section>
     </main>

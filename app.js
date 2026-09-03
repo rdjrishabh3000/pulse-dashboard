@@ -25,9 +25,7 @@ const weatherMap = {
   95: { text: "Thunderstorm", icon: "⛈️" }
 };
 
-const FALLBACK_NEWS_IMG = "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&auto=format&fit=crop&q=60";
-
-// GPS Button
+// Geolocation Handler
 geoBtn.addEventListener('click', () => {
   if (!navigator.geolocation) {
     alert('Geolocation is not supported by your browser.');
@@ -39,7 +37,6 @@ geoBtn.addEventListener('click', () => {
     async (position) => {
       const { latitude, longitude } = position.coords;
       try {
-        cityInput.value = "Your Location";
         loadWeatherData(latitude, longitude, "Your Location");
       } catch (err) {
         console.error("GPS Reverse Geocode Error:", err);
@@ -54,7 +51,7 @@ geoBtn.addEventListener('click', () => {
   );
 });
 
-// Map Click
+// Interactive Map Toggle
 mapPlaceholder.addEventListener('click', () => {
   if (currentCoords.lat && currentCoords.lon) {
     mapIframe.src = `https://maps.google.com/maps?q=${currentCoords.lat},${currentCoords.lon}&z=11&output=embed`;
@@ -62,7 +59,7 @@ mapPlaceholder.addEventListener('click', () => {
   }
 });
 
-// Auto-suggest Keyboard Navigation
+// Auto-suggest Navigation
 cityInput.addEventListener('keydown', (e) => {
   const items = suggestionsList.querySelectorAll('li');
   if (!suggestionsList.classList.contains('active') || items.length === 0) return;
@@ -176,8 +173,8 @@ async function fetchDashboardData(city) {
       return;
     }
 
-    const { latitude, longitude, name, country } = geoData.results[0];
-    const locationName = `${name}, ${country || ''}`;
+    const { latitude, longitude, name, admin1, country } = geoData.results[0];
+    const locationName = `${name}${admin1 ? ', ' + admin1 : ''}, ${country || ''}`;
     
     loadWeatherData(latitude, longitude, locationName);
   } catch (error) {
@@ -213,7 +210,7 @@ async function loadWeatherData(lat, lon, locationName) {
   renderHourly(weatherData.hourly);
   renderForecast(weatherData.daily);
   fetchAirQuality(lat, lon);
-  fetchNews(locationName.split(',')[0]);
+  fetchNewsFast(locationName);
 }
 
 async function fetchAirQuality(lat, lon) {
@@ -289,77 +286,79 @@ function renderForecast(daily) {
   forecastGrid.innerHTML = html;
 }
 
-function extractArticleImage(item) {
-  if (item.thumbnail && item.thumbnail.length > 0) return item.thumbnail;
-  if (item.enclosure && item.enclosure.link) return item.enclosure.link;
+// Relative time calculator
+function getRelativeTime(dateString) {
+  if (!dateString) return 'Recent';
+  const pubDate = new Date(dateString);
+  const now = new Date();
+  const diffInMinutes = Math.floor((now - pubDate) / (1000 * 60));
 
-  if (item.description) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(item.description, 'text/html');
-    const img = doc.querySelector('img');
-    if (img && img.src) return img.src;
-  }
-
-  return FALLBACK_NEWS_IMG;
+  if (diffInMinutes < 60) return `${Math.max(1, diffInMinutes)}m ago`;
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
 }
 
-async function fetchNews(city) {
+async function fetchNewsFast(fullLocationString) {
   const newsFeed = document.getElementById('newsFeed');
   newsFeed.innerHTML = `
-    <div class="news-item-skeleton"></div>
-    <div class="news-item-skeleton"></div>
-    <div class="news-item-skeleton"></div>
+    <div class="news-card-skeleton"></div>
+    <div class="news-card-skeleton"></div>
+    <div class="news-card-skeleton"></div>
+    <div class="news-card-skeleton"></div>
   `;
 
-  try {
-    const query = encodeURIComponent(city);
-    const rssUrl = `https://news.google.com/rss/search?q=${query}&hl=en-IN&gl=IN&ceid=IN:en`;
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
-    const data = await res.json();
+  const city = fullLocationString.split(',')[0].trim();
+  
+  // Clean search query without hardcoding regional gl/ceid parameters
+  const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(city)}&hl=en-US&gl=US&ceid=US:en`;
+  const fallbackUrl = `https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en`;
 
-    let articles = data.items || [];
-    
-    if (articles.length === 0) {
-      const fallbackRss = `https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en`;
-      const fallbackRes = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(fallbackRss)}`);
-      const fallbackData = await fallbackRes.json();
-      articles = fallbackData.items || [];
+  const fetchWithTimeout = async (url) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4000);
+    try {
+      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`, { signal: controller.signal });
+      clearTimeout(timer);
+      const data = await res.json();
+      return (data.status === 'ok' && data.items && data.items.length > 0) ? data.items : null;
+    } catch {
+      clearTimeout(timer);
+      return null;
     }
+  };
 
-    if (articles.length === 0) {
-      newsFeed.innerHTML = "<p class='loading-state'>No live news found for this area.</p>";
-      return;
-    }
-
-    newsFeed.innerHTML = articles.slice(0, 10).map(article => {
-      const pubDate = new Date(article.pubDate).toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric'
-      });
-      const imgSrc = extractArticleImage(article);
-
-      return `
-        <div class="news-item">
-          <img 
-            class="news-thumb" 
-            src="${imgSrc}" 
-            alt="News thumbnail" 
-            loading="lazy" 
-            onerror="this.src='${FALLBACK_NEWS_IMG}'" 
-          />
-          <div class="news-content">
-            <a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a>
-            <p>${pubDate} • ${article.author || 'Live Feed'}</p>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-  } catch (error) {
-    console.error("Error fetching news:", error);
-    newsFeed.innerHTML = "<p class='loading-state'>Unable to load news feed right now.</p>";
+  let items = await fetchWithTimeout(rssUrl);
+  
+  // If city search fails, search for broader query or general global news
+  if (!items) {
+    items = await fetchWithTimeout(fallbackUrl);
   }
-}
 
-// Initial load
-fetchDashboardData('Jodhpur');
+  if (!items) {
+    newsFeed.innerHTML = "<p class='loading-state'>No live news available right now.</p>";
+    return;
+  }
+
+  newsFeed.innerHTML = items.slice(0, 8).map(article => {
+    const timeAgo = getRelativeTime(article.pubDate);
+    const source = article.author || 'Google News';
+
+    return `
+      <a class="news-article-card" href="${article.link}" target="_blank" rel="noopener noreferrer">
+        <div class="article-top">
+          <div class="article-meta-header">
+            <span class="source-chip" title="${source}">${source}</span>
+            <span class="time-stamp">${timeAgo}</span>
+          </div>
+          <h3 class="article-title">${article.title}</h3>
+        </div>
+        <div class="article-footer">
+          <span class="read-more-link">Read article ↗</span>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+fetchDashboardData('Prayagraj');
